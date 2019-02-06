@@ -62,7 +62,22 @@ public class MetricController {
 		
 		if (metricName == null || metricName.isEmpty())
 		{
-			ResponseEntity.badRequest().body("Please add ?stat=mean|median|min|max to url.");
+			ResponseEntity.badRequest().body("Metric Name cannot be null or empty");
+		}
+		
+		//Handle if requestedStatistic is null or empty
+		
+		if(requestedStatistic == null || requestedStatistic.isEmpty())
+		{
+			try
+			{
+				ResponseEntity.ok(metricsRepository.getDataForMetric(metricName));
+			}
+			catch (IllegalArgumentException ex)
+			{
+				//log it
+				ResponseEntity.badRequest().body(ex.getMessage());
+			}			
 		}
 		
 		double result = 0.0;
