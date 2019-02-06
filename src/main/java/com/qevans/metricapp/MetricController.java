@@ -4,8 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qevans.metricapp.repository.IMetricsRepository;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +20,18 @@ public class MetricController {
 	private IMetricsRepository metricsRepository;
 
 	@PostMapping("/metric")
-	public String index(@RequestBody String newMetric) {
+	public ResponseEntity<?> index(@RequestBody String newMetric) {
 
-		// Validation???
-
-		metricsRepository.addMetric(newMetric);
-
-		return newMetric;
+		if(newMetric == null || newMetric.isEmpty())
+		{
+			return ResponseEntity.badRequest().body("Metric cannot be null or empty");
+		}
+		
+		if (metricsRepository.addMetric(newMetric)) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(newMetric);
+		}
+		
+		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Metric Already Exists.");
 	}
 
 	@GetMapping("/metric")
@@ -41,6 +44,11 @@ public class MetricController {
 
 	@PostMapping("/metric/{metricName}")
 	public ResponseEntity<?> addDataToMetric(@PathVariable String metricName, @RequestBody double data) {
+		if(metricName == null)
+		{
+			return ResponseEntity.badRequest().body("Metric Name cannot be null.");
+		}
+		
 		if (!metricsRepository.addDataToMetric(metricName, data)) {
 			return ResponseEntity.badRequest().body("Metric Name : " + metricName + " does not exist.");
 		}
@@ -51,7 +59,14 @@ public class MetricController {
 	@GetMapping("/metric/{metricName}")
 	public ResponseEntity<?> getMetricStatistic(@PathVariable String metricName,
 			@RequestParam("stat") String requestedStatistic) {
+		
+		if (metricName == null || metricName.isEmpty())
+		{
+			ResponseEntity.badRequest().body("Please add ?stat=mean|median|min|max to url.");
+		}
+		
 		double result = 0.0;
+		
 		try {
 			if (requestedStatistic.equalsIgnoreCase("mean")) {
 				result = metricsRepository.getAverageOfMetric(metricName);
@@ -62,7 +77,7 @@ public class MetricController {
 			} else if (requestedStatistic.equalsIgnoreCase("max")) {
 				result = metricsRepository.getMaximumOfMetric(metricName);
 			} else {
-				return ResponseEntity.badRequest().body("No Supported Statistic Requested.");
+				return ResponseEntity.badRequest().body("No Supported Statistic Requested. Please add ?stat=mean|median|min|max to url.");
 			}
 		} catch (IllegalArgumentException ex) {
 			System.out.println();

@@ -22,6 +22,11 @@ public class MetricsRepository implements IMetricsRepository {
 	@Override
 	public boolean addMetric(String metric) {
 
+		if(metric == null || metric.isEmpty())
+		{
+			throw new IllegalArgumentException("Metric cannot be null or empty.");
+		}
+		
 		// check if metric exists
 		if (metricRepository.containsKey(metric)) {
 			return false;
@@ -46,6 +51,11 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public boolean addDataToMetric(String metric, double data) {
+		
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
 		// if metric not in map, don't do anything
 		// else, if length is 0, insert
 		if (!metricRepository.containsKey(metric)) {
@@ -69,6 +79,11 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getMedianOfMetric(String metric) {
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
+		
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
@@ -107,6 +122,10 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getMinimumOfMetric(String metric) {
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
 		// if metric doesnt exist, throw error
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
@@ -119,7 +138,11 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getMaximumOfMetric(String metric) {
-		// TODO Auto-generated method stub
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
+		
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
@@ -133,6 +156,11 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getAverageOfMetric(String metric) {
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
+		
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
@@ -161,6 +189,11 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public List<Double> getDataForMetric(String metric) {
+		if(metric == null)
+		{
+			throw new IllegalArgumentException("Metric cannot be null");
+		}
+		
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
