@@ -2,8 +2,8 @@
 Building A Metrics Application
 
 #API Documentation
-/metric
-/
+To see API Documentation, deploy jar
+Then in browser go to: http://localhost:8080/swagger-ui.htm
 
 #How To Build
 Download the git Repository.  
