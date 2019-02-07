@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,15 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qevans.metricapp.dto.DataDTO;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.*;
-
-import junit.framework.TestCase;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@Category({Unit.class})
 public class MetricsControllerIntTest {
 
 	@Autowired

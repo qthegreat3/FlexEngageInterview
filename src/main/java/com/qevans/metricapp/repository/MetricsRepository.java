@@ -19,6 +19,15 @@ public class MetricsRepository implements IMetricsRepository {
 		metricRepository = new ConcurrentHashMap<String, List<Double>>();
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return true is add is successful and false if metric already exists
+	 * @throws IllegalArgumentException is metric is null or empty
+	 * 
+	 * Big O(constant) space is linear
+	 */
 	@Override
 	public boolean addMetric(String metric) {
 
@@ -40,14 +49,44 @@ public class MetricsRepository implements IMetricsRepository {
 		return true;
 	}
 
+	/**
+	 * <p>This method returns all metric names created in the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return String array of containing all metric names 
+	 * 
+	 * Big O(n)
+	 */
 	@Override
 	public String[] getAllMetrics() {
-		// TODO Auto-generated method stub
 		Set<String> metricsSet = metricRepository.keySet();
 		String[] metricArray = new String[metricsSet.size()];
 		return metricsSet.toArray(metricArray);
 	}
 
+	/**
+	 * <p>This method adds a data value to the list of data for a specified metric
+	 * </p>
+	 * @param metric is a String
+	 * @param data is a double that will be added to list of data for metric
+	 * @return true if add is successful and false if metric does not exist
+	 * @throws IllegalArgumentException is metric is null
+	 * 
+	 * Big O(n): This add maintains the list of data as a sorted list.
+	 * This is done using a binary search to find where to insert the new value.
+	 * It is linear time because the other values in the list have to be shifted so that the 
+	 * new value can be inserted in the proper place.
+	 * 
+	 * This makes for a slower add then is possible, but does allow for very fast calculation of median, min, and max of a given list.
+	 * Reducing from nlog(n) time to constant for calculating these statistics.  Depending on use of the API, the tradeoff can be made.
+	 * 
+	 * If users are more using this to add a lot of values and won't use the statistics much, then I'd favor having adding of values be
+	 * constant and have slower statistics calculations.
+	 * 
+	 * I assumed users would use this mainly to get statistics quickly, so I went with the slower add but with the fast stat calculations.
+	 * 
+	 * Space is linear
+	 */
 	@Override
 	public boolean addDataToMetric(String metric, double data) {
 
@@ -75,6 +114,16 @@ public class MetricsRepository implements IMetricsRepository {
 		return true;
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return median of list of values for metric as a double.  If list has even amount of values
+	 * then function returns the average between the 2 center values in the list. If list is empty, will return 0.
+	 * @throws IllegalArgumentException is metric is null or is not in data store
+	 * 
+	 * Big O(constant)
+	 */
 	@Override
 	public double getMedianOfMetric(String metric) {
 		if (metric == null) {
@@ -113,6 +162,15 @@ public class MetricsRepository implements IMetricsRepository {
 		return median;
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return minimum of list of values for metric as a double. If list is empty, will return 0;
+	 * @throws IllegalArgumentException is metric is null or is not in data store
+	 * 
+	 * Big O(constant)
+	 */
 	@Override
 	public double getMinimumOfMetric(String metric) {
 		if (metric == null) {
@@ -133,6 +191,15 @@ public class MetricsRepository implements IMetricsRepository {
 		return metricsDataList.get(0);
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return maximum of list of values for metric as a double. If list is empty, will retun 0.
+	 * @throws IllegalArgumentException is metric is null or is not in data store
+	 * 
+	 * Big O(constant)
+	 */
 	@Override
 	public double getMaximumOfMetric(String metric) {
 		if (metric == null) {
@@ -154,6 +221,15 @@ public class MetricsRepository implements IMetricsRepository {
 		return metricsDataList.get(endOfMetricsDataList);
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return mean of list of values for metric as a double. If list is empty, will return 0.
+	 * @throws IllegalArgumentException is metric is null or is not in data store
+	 * 
+	 * Big O(n)
+	 */
 	@Override
 	public double getAverageOfMetric(String metric) {
 		if (metric == null) {
@@ -182,6 +258,15 @@ public class MetricsRepository implements IMetricsRepository {
 		return sum;
 	}
 
+	/**
+	 * <p>This method adds new metric names to the data store of metrics
+	 * </p>
+	 * @param metric is a String
+	 * @return returns list of values stored for that metric
+	 * @throws IllegalArgumentException is metric is null or is not in data store
+	 * 
+	 * Big O(constant)
+	 */
 	@Override
 	public List<Double> getDataForMetric(String metric) {
 		if (metric == null) {

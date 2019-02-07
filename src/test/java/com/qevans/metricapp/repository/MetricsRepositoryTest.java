@@ -5,14 +5,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.qevans.metricapp.Unit;
+
 @RunWith(SpringRunner.class)
+@Category({Unit.class})
 public class MetricsRepositoryTest {
 
 	@Test
