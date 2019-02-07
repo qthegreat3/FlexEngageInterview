@@ -20,7 +20,7 @@ public class MetricController {
 	private IMetricsRepository metricsRepository;
 
 	@PostMapping("/metric")
-	public ResponseEntity<?> index(@RequestBody String newMetric) {
+	public ResponseEntity<String> index(@RequestBody String newMetric) {
 
 		if(newMetric == null || newMetric.isEmpty())
 		{
