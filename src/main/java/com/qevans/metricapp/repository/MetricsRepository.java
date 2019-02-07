@@ -22,11 +22,10 @@ public class MetricsRepository implements IMetricsRepository {
 	@Override
 	public boolean addMetric(String metric) {
 
-		if(metric == null || metric.isEmpty())
-		{
+		if (metric == null || metric.isEmpty()) {
 			throw new IllegalArgumentException("Metric cannot be null or empty.");
 		}
-		
+
 		// check if metric exists
 		if (metricRepository.containsKey(metric)) {
 			return false;
@@ -51,9 +50,8 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public boolean addDataToMetric(String metric, double data) {
-		
-		if(metric == null)
-		{
+
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
 		// if metric not in map, don't do anything
@@ -79,11 +77,10 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getMedianOfMetric(String metric) {
-		if(metric == null)
-		{
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
-		
+
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
@@ -91,39 +88,34 @@ public class MetricsRepository implements IMetricsRepository {
 		List<Double> metricsDataList = metricRepository.get(metric);
 
 		if (metricsDataList.isEmpty()) {
-			throw new IllegalArgumentException("Cannot Calculate a median for an empty list.");
+			return 0.0;
 		}
 
 		return calculateMedian(metricsDataList);
 	}
 
-	private double calculateMedian(List<Double> theList)
-	{
+	private double calculateMedian(List<Double> theList) {
 		double median;
-		
-		synchronized(theList) {
-			
-		int middleOfList = theList.size() / 2;
-		
-		boolean isEvenLengthList = (theList.size() % 2) == 0;
-		
-		if (isEvenLengthList)
-		{
-		    median = (theList.get(middleOfList) + theList.get(middleOfList -1))/2;
+
+		synchronized (theList) {
+
+			int middleOfList = theList.size() / 2;
+
+			boolean isEvenLengthList = (theList.size() % 2) == 0;
+
+			if (isEvenLengthList) {
+				median = (theList.get(middleOfList) + theList.get(middleOfList - 1)) / 2;
+			} else {
+				median = theList.get(middleOfList);
+			}
 		}
-		else
-		{
-		    median = theList.get(middleOfList);
-		}
-		}
-		
-		 return median;
+
+		return median;
 	}
 
 	@Override
 	public double getMinimumOfMetric(String metric) {
-		if(metric == null)
-		{
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
 		// if metric doesnt exist, throw error
@@ -133,21 +125,29 @@ public class MetricsRepository implements IMetricsRepository {
 
 		List<Double> metricsDataList = metricRepository.get(metric);
 
+		if(metricsDataList.isEmpty())
+		{
+			return 0.0;
+		}
+		
 		return metricsDataList.get(0);
 	}
 
 	@Override
 	public double getMaximumOfMetric(String metric) {
-		if(metric == null)
-		{
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
-		
+
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
 
 		List<Double> metricsDataList = metricRepository.get(metric);
+
+		if (metricsDataList.isEmpty()) {
+			return 0.0;
+		}
 
 		int endOfMetricsDataList = metricsDataList.size() - 1;
 
@@ -156,20 +156,15 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public double getAverageOfMetric(String metric) {
-		if(metric == null)
-		{
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
-		
+
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
 
 		List<Double> metricsDataList = metricRepository.get(metric);
-
-		if (metricsDataList.isEmpty()) {
-			throw new IllegalArgumentException("Cannot Calculate a average for an empty list.");
-		}
 
 		return calculateAverage(metricsDataList);
 	}
@@ -189,17 +184,16 @@ public class MetricsRepository implements IMetricsRepository {
 
 	@Override
 	public List<Double> getDataForMetric(String metric) {
-		if(metric == null)
-		{
+		if (metric == null) {
 			throw new IllegalArgumentException("Metric cannot be null");
 		}
-		
+
 		if (!metricRepository.containsKey(metric)) {
 			throw new IllegalArgumentException("Metric: " + metric + " does not exist.");
 		}
 
 		List<Double> metricsDataList = metricRepository.get(metric);
-		
+
 		return metricsDataList;
 	}
 
