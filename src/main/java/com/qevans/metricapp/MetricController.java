@@ -2,6 +2,7 @@ package com.qevans.metricapp;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qevans.metricapp.dto.DataDTO;
 import com.qevans.metricapp.repository.IMetricsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,13 @@ public class MetricController {
 	}
 
 	@PostMapping("/metric/{metricName}")
-	public ResponseEntity<?> addDataToMetric(@PathVariable String metricName, @RequestBody double data) {
+	public ResponseEntity<?> addDataToMetric(@PathVariable String metricName, @RequestBody DataDTO data) {
 		if(metricName == null)
 		{
 			return ResponseEntity.badRequest().body("Metric Name cannot be null.");
 		}
 		
-		if (!metricsRepository.addDataToMetric(metricName, data)) {
+		if (!metricsRepository.addDataToMetric(metricName, data.getValue())) {
 			return ResponseEntity.badRequest().body("Metric Name : " + metricName + " does not exist.");
 		}
 
